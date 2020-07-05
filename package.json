@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node frontindex",
-    "server": "nodemon frontindex",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start:dev": "nodemon frontindex",
     "debug": "ndb frontindex.js"
   },
   "dependencies": {
