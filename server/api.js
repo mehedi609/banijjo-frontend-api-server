@@ -2523,4 +2523,7 @@ router.get('/getPolicy/:policyname', async (req, res) => {
   }
 });
 
+
+router.use('/api/ecourier', require('./ecourier.v0.js'))
+
 module.exports = router;
