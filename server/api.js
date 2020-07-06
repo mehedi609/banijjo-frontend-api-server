@@ -2508,12 +2508,14 @@ router.get('/vendor_ids_for_site_map', async (req, res) => {
 router.get('/getPolicy/:policyname', async (req, res) => {
   const { policyname } = req.params;
   try {
+    
     const data = await query(
       `SELECT terms_and_conditions 
        FROM terms_conditions
        WHERE condition_type_id IN
         (SELECT id FROM terms_conditions_type WHERE name LIKE '${policyname}')`
     )
+
     res.status(200).json([...data])
   } catch (e) {
     console.error(e)
