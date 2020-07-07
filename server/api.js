@@ -2523,9 +2523,13 @@ router.get('/getPolicy/:policyname', async (req, res) => {
 });
 
 /*
-* E-COURIER API MODULE 
-* all request url having path baseurl/api/ecourier/ will be sent redirected to this module
+* E-COURIER API MODULE | request redirect : baseurl/api/ecourier/ 
 */
 router.use('/ecourier', require('./ecourier.v0.js'))
+
+/*
+* DMONEY API MODULE | request redirect : baseurl/api/dmoney/ 
+*/
+router.use('/dmoney', require('./dmoney.v0.js'))
 
 module.exports = router;
