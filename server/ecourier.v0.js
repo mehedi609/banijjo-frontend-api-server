@@ -15,16 +15,27 @@ const {
 router.get('/', async (req, res) => {
     res.send('ecourier api')
 })
+
+//test
+router.get('/test', async (req, res) => {
+    fetch('https://jsonplaceholder.typicode.com/todos/1')
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+})
+
 // test 
-router.post('/placeorder', async (req, res) => {
+router.post('/test', async (req, res) => {
     try {
-        const { customerName, orderNo } = req.body;    
-        
-        if (customerName && orderNo) {
-          return res.send({ message : 'Success' })
-        } else {
-          return res.send({ message : 'Fail' })
-        }
+        const { customerName, orderNo } = req.body;            
+        if (customerName && orderNo) return res.status(200).send({ message : 'Success' })
+        else return res.send({ message : 'Fail' })        
       } catch (e) {
         res.status(500).send(e)
     }
@@ -45,9 +56,15 @@ router.post('/placeorder', async (req, res) => {
             headers : { headers },
             body : JSON.stringify(body)
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err))
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
 
 //  Parcel track
@@ -63,9 +80,15 @@ router.post('/parceltrack', async (req, res) => {
             headers : { headers },
             body : JSON.stringify(body)
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err))
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
   
 
@@ -82,9 +105,15 @@ router.post('/citylist', async (req, res) => {
             headers : { headers },
             body : { "parcel" : req.body.parcel || "citylist" }
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err))
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
   
 
@@ -103,9 +132,15 @@ router.post('/coveragearea', async (req, res) => {
                 "city" : req.body.city || "Dhaka"
             }
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err))
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
 
 
@@ -121,9 +156,15 @@ router.post('/packagelist', async (req, res) => {
             headers : { headers },
             body : { "parcel" : req.body.parcel || "packagelist" }
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err))
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
   
 
@@ -141,9 +182,15 @@ router.post('/cancelorder', async (req, res) => {
             headers : { headers },
             body : JSON.stringify(body)
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err))
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
   
 
@@ -162,9 +209,15 @@ router.post('/cancelorder', async (req, res) => {
                 "number" : req.body.number // Customer mobile number
             }
     })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err))
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
   
 
