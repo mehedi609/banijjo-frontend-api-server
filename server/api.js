@@ -26,8 +26,7 @@ const {
   showProductListByCategory,
   getDiscountByProductId,
   getDiscountArr,
-  getProductsFromTempsellOrWishlist,
-  getPolicy
+  getProductsFromTempsellOrWishlist
 } = require('./helpers');
 
 const { query } = require('../db_config');
@@ -2523,7 +2522,10 @@ router.get('/getPolicy/:policyname', async (req, res) => {
   }
 });
 
-
-router.use('/api/ecourier', require('./ecourier.v0.js'))
+/*
+* E-COURIER API MODULE 
+* all request url having path baseurl/api/ecourier/ will be sent redirected to this module
+*/
+router.use('/ecourier', require('./ecourier.v0.js'))
 
 module.exports = router;
