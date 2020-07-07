@@ -24,6 +24,7 @@ module.exports.getProductsByCatIdAndVenId = async (catId, venId) => {
       product_name,
       product_sku,
       home_image,
+      image,
       productPrice,
       vendor_id,
       category_id,

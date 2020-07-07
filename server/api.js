@@ -267,7 +267,7 @@ router.get('/sameVendorOrCat/:productId/:venOrCat', async (req, res) => {
       // product List of Similar Vendor-Other Category
       products = await query(`
         SELECT 
-          id AS product_id, product_name, product_sku, home_image, 
+          id AS product_id, product_name, product_sku, home_image, image,
           productPrice, vendor_id, category_id, DATEDIFF(CURRENT_TIMESTAMP, created_date) <= 15 AS newProduct
         FROM 
           products 
@@ -282,7 +282,7 @@ router.get('/sameVendorOrCat/:productId/:venOrCat', async (req, res) => {
     } else if (venOrCat === 'c') {
       products = await query(`
         SELECT 
-          id AS product_id, product_name, product_sku, home_image, 
+          id AS product_id, product_name, product_sku, home_image, image,
           productPrice, vendor_id, category_id, DATEDIFF(CURRENT_TIMESTAMP, created_date) <= 15 AS newProduct
         FROM 
           products 
@@ -1646,7 +1646,7 @@ router.post('/getVendorProductsByCategory', async (req, res) => {
     const { vendorId, categoryIds } = req.body;
 
     const ProductData = await query(
-      "SELECT id,category_id,product_name,productPrice,home_image,created_date from products WHERE status='active' AND softDelete=0 AND vendor_id = '" +
+      "SELECT id,category_id,product_name,productPrice,home_image, image,created_date from products WHERE status='active' AND softDelete=0 AND vendor_id = '" +
       vendorId +
       "' AND category_id IN " +
       '(' +
@@ -1696,7 +1696,7 @@ router.get('/getCustomerCartProductsCount/:customer_id', async (req, res) => {
 
 router.get('/all_category_product_list', async (req, res) => {
   try {
-    const productLists = await query(`select category.category_name, products.id, products.product_name, products.home_image, products.category_id, products.productPrice
+    const productLists = await query(`select category.category_name, products.id, products.product_name, products.home_image, products.image, products.category_id, products.productPrice
 from category join products on category.id = products.category_id
 where products.qc_status='yes' and products.status='active' and products.isApprove=1 and products.softDelete=0;`);
     return res.send({

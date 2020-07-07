@@ -9,6 +9,7 @@ const getProductDetailsByProductId = async productId => {
         product_name, 
         productPrice, 
         home_image, 
+        image,
         DATEDIFF(CURRENT_TIMESTAMP, created_date) <= 15 AS newProduct 
       FROM 
         products

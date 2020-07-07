@@ -119,6 +119,7 @@ const getProductsByCategoryId = async cat_id => {
         product_name, 
         productPrice, 
         home_image, 
+        image,
         DATEDIFF(CURRENT_TIMESTAMP, created_date) <= 15 AS newProduct
        FROM 
         products
@@ -241,7 +242,7 @@ const getProductsFromTempsellOrWishlist = async cartData => {
   for (const el of cartData) {
     const cartProduct = await query(`
           SELECT 
-            id, product_name, productPrice, home_image 
+            id, product_name, productPrice, home_image, image 
           FROM 
             products 
           WHERE 
