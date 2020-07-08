@@ -35,6 +35,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api", api);
+app.use("/api/dynamic-routes", require('./server/dynamics-routes'));
 
 app.listen(3001, () =>
   console.log("Express server is running on localhost:3001")
