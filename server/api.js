@@ -2505,16 +2505,26 @@ router.get('/vendor_ids_for_site_map', async (req, res) => {
 * Policy Pages - API
 */
 router.get('/getPolicy/:policyname', async (req, res) => {
-  const { policyname } = req.params;
   try {
+    let { policyname } = req.params;
+  
+    policyname = slugify(policyname, {
+      replacement: '-',  // replace spaces with replacement character, defaults to `-`
+      remove: undefined, // remove characters that match regex, defaults to `undefined`
+      lower: true,      // convert to lower case, defaults to `false`
+      strict: false,     // strip special characters except replacement, defaults to `false`
+      locale: 'vi'       // language code of the locale to use
+    })
     
     const data = await query(
       `SELECT terms_and_conditions 
        FROM terms_conditions
        WHERE condition_type_id IN
-        (SELECT id FROM terms_conditions_type WHERE name LIKE '${policyname}')`
+        (SELECT id FROM terms_conditions_type WHERE slugify(name) LIKE '${policyname}')`
     )
 
+    // let dbq = await query(`SELECT id FROM terms_conditions_type WHERE slugify(name) LIKE '${policyname}'`)
+    // res.send(dbq)
     res.status(200).json([...data])
   } catch (e) {
     console.error(e)
