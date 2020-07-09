@@ -1,12 +1,42 @@
 const { query } = require("../db_config")
 
-const api_key = "asdasdasd"
-const api_secret = "asdasdasd"
-const user_id = "asdasdasd"
+// API Key        : BDNP
+// API Secret     : KGRgp
+
+// const api_key = "BDNP"
+// const api_secret = "KGRgp"
+// const user_id = "16017"
+
+// const sandbox = true
+
+// const sandbox_url = "https://staging.ecourier.com.bd/api/"
+// const production_url = "https://ecourier.com.bd/apiv2/"
+
+
+const eCourierInfo = async() => {
+    try{
+        return await query(`
+            SELECT 
+              * 
+            FROM 
+                courier-services
+            WHERE 
+              id = 1
+        `)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+}
+
+const api_key = eCourierInfo.api_key
+const api_secret = eCourierInfo.api_secret
+const user_id = eCourierInfo.user_id
+const sandbox_url = eCourierInfo.sandbox_url
+const production_url = eCourierInfo.production_url
 
 const sandbox = true
-const sandbox_url = "https://dev.ecourier.com.bd/apiv2/"
-const production_url = "https://ecourier.com.bd/apiv2/"
+
+
 
 module.exports.ecourierBaseUrl = () => {
     return sandbox ? sandbox_url : production_url
@@ -57,8 +87,7 @@ module.exports.ecourierParcelTrackBody = (req) => {
 
 module.exports.ecourierCancelOrderBody = (req) => {
     return {
-        "parcel" : req.body.parcel || "track", // Define the type operation to be performed, example 'track'
-        "tracking_no" : req.body.tracking_no, //  eCourier ID
+        "tracking" : req.body.tracking, //  eCourier ID
         "comment" : req.body.comment
     }
 }

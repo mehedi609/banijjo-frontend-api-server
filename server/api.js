@@ -2504,6 +2504,23 @@ router.get('/vendor_ids_for_site_map', async (req, res) => {
 /*
 * Policy Pages - API
 */
+
+router.get('/getPolicyList', async (req, res) => {
+  try{
+    const data = await query(`
+        SELECT 
+          * 
+        FROM 
+          terms_conditions_type
+        WHERE 
+          softDel = 0
+    `)
+    res.status(200).json([...data])
+  } catch(e){
+    res.status(500).send(e)
+  }
+})
+
 router.get('/getPolicy/:policyname', async (req, res) => {
   try {
     let { policyname } = req.params;
@@ -2516,12 +2533,21 @@ router.get('/getPolicy/:policyname', async (req, res) => {
       locale: 'vi'       // language code of the locale to use
     })
     
-    const data = await query(
-      `SELECT terms_and_conditions 
-       FROM terms_conditions
-       WHERE condition_type_id IN
-        (SELECT id FROM terms_conditions_type WHERE slugify(name) LIKE '${policyname}')`
-    )
+    const data = await query(`
+      SELECT 
+        terms_and_conditions 
+      FROM 
+        terms_conditions
+      WHERE 
+        condition_type_id IN (
+          SELECT 
+            id 
+          FROM 
+            terms_conditions_type 
+          WHERE 
+            slugify(name) LIKE '${policyname}'
+        )
+    `)
 
     // let dbq = await query(`SELECT id FROM terms_conditions_type WHERE slugify(name) LIKE '${policyname}'`)
     // res.send(dbq)

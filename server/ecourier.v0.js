@@ -44,13 +44,13 @@ router.post('/test', async (req, res) => {
 
 
 // Place order
-router.post('/placeorder', async (req, res) => {
+router.post('/order-place', async (req, res) => {
 
     const url = ecourierBaseUrl()
     const headers = ecourierHeaders()
-    const body = ecourierPlaceOrderBody()
-
-    fetch(`${url}/Place%20order`, {
+    const body = ecourierPlaceOrderBody(req)
+    
+    fetch(`${url}/order-place`, {
             method : 'POST',
             crossDomain : true,
             headers : { headers },
@@ -60,21 +60,39 @@ router.post('/placeorder', async (req, res) => {
         return res.json();
     })
     .then(data => {
-        return res.send(data);
+        // return res.send(data);
+        saveOrderInfo(data);
     })
     .catch(err => {
-        console.log(err);
+        res.send(err);
     })
 });
 
+
+const saveOrderInfo = async (data) => {
+    try{
+        const { message, ID } = data;
+
+        return await query(
+            `INSERT INTO order 
+            (courier_service_id, courier_order_code) VALUES (1, ${ID})`
+        );
+
+        res.send(message);
+    }catch(e){
+        res.send(e)
+    }
+}
+
+
 //  Parcel track
-router.post('/parceltrack', async (req, res) => {
+router.post('/track', async (req, res) => {
 
     const url = ecourierBaseUrl()
     const headers = ecourierHeaders()
     const body = ecourierParcelTrackBody()
 
-    fetch(`${url}/Parcel%20track`, {
+    fetch(`${url}/track`, {
             method : 'POST',
             crossDomain : true,
             headers : { headers },
@@ -90,6 +108,86 @@ router.post('/parceltrack', async (req, res) => {
         console.log(err);
     })
 });
+  
+
+
+//  Package list
+router.post('/packages', async (req, res) => {
+
+    const url = ecourierBaseUrl()
+    const headers = ecourierHeaders()
+
+    fetch(`${url}/packages`, {
+            method : 'POST',
+            crossDomain : true,
+            headers : { headers },
+            body : { "parcel" : req.body.parcel || "packagelist" }
+    })
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+});
+
+
+
+//  Cancel Order
+router.post('/cancel-order', async (req, res) => {
+
+    const url = ecourierBaseUrl()
+    const headers = ecourierHeaders()
+    const body = ecourierCancelOrderBody()
+
+    fetch(`${url}/cancel-order`, {
+            method : 'POST',
+            crossDomain : true,
+            headers : { headers },
+            body : JSON.stringify(body)
+    })
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+});
+  
+
+//  Fraud alert service 
+router.post('/fraud-status-check', async (req, res) => {
+
+    const url = ecourierBaseUrl()
+    const headers = ecourierHeaders()
+
+    fetch(`${url}/fraud-status-check`, {
+            method : 'POST',
+            crossDomain : true,
+            headers : { headers },
+            body : {
+                // "parcel" : "fraud_status_check",
+                "number" : req.body.number // Customer mobile number
+            }
+    })
+    .then(res => {
+        return res.json();
+    })
+    .then(data => {
+        return res.send(data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+});
+  
+
   
 
 
@@ -144,82 +242,7 @@ router.post('/coveragearea', async (req, res) => {
 });
 
 
-//  Package list
-router.post('/packagelist', async (req, res) => {
 
-    const url = ecourierBaseUrl()
-    const headers = ecourierHeaders()
-
-    fetch(`${url}/Package%20list`, {
-            method : 'POST',
-            crossDomain : true,
-            headers : { headers },
-            body : { "parcel" : req.body.parcel || "packagelist" }
-    })
-    .then(res => {
-        return res.json();
-    })
-    .then(data => {
-        return res.send(data);
-    })
-    .catch(err => {
-        console.log(err);
-    })
-});
-  
-
-
-//  Cancel Order
-router.post('/cancelorder', async (req, res) => {
-
-    const url = ecourierBaseUrl()
-    const headers = ecourierHeaders()
-    const body = ecourierCancelOrderBody()
-
-    fetch(`${url}/Cancel%20Order`, {
-            method : 'POST',
-            crossDomain : true,
-            headers : { headers },
-            body : JSON.stringify(body)
-    })
-    .then(res => {
-        return res.json();
-    })
-    .then(data => {
-        return res.send(data);
-    })
-    .catch(err => {
-        console.log(err);
-    })
-});
-  
-
-//   Fraud alert service 
-router.post('/cancelorder', async (req, res) => {
-
-    const url = ecourierBaseUrl()
-    const headers = ecourierHeaders()
-
-    fetch(`${url}/Fraud%20alert%20service `, {
-            method : 'POST',
-            crossDomain : true,
-            headers : { headers },
-            body : {
-                "parcel" : "fraud_status_check",
-                "number" : req.body.number // Customer mobile number
-            }
-    })
-    .then(res => {
-        return res.json();
-    })
-    .then(data => {
-        return res.send(data);
-    })
-    .catch(err => {
-        console.log(err);
-    })
-});
-  
 
 
 
