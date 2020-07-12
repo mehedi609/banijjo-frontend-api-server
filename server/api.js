@@ -6,7 +6,6 @@ const auth = require('./authFunctionality');
 const temp_wish = require('./tempSellWishList');
 const featureProductHelper = require('./feature_product_list_helper');
 const vendor = require('./vendorHelper');
-const {getIdFromSlug} = require("./slug.helpers");
 
 // const upload_path = `${__dirname}/../../upload/customerPhoto/`;
 const upload_path = `${__dirname}/../../banijjoAdmin/public/upload/customerPhoto/`;
