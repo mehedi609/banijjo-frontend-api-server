@@ -22,7 +22,7 @@ router.get('/policy/:slug', async (req, res) => {
           tct.id = ${id}`
     )
 
-    return res.status(200).json(data ? data[0] : []);
+    return res.status(200).json(data.length > 0 ? data[0] : null);
   } catch (e) {
     console.error(e)
     res.status(500).send(e)
