@@ -1,6 +1,5 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const slugify = require('slugify');
 const urlSlug = require('url-slug')
 const { sampleSize, size } = require('lodash');
 const auth = require('./authFunctionality');
@@ -2504,77 +2503,7 @@ router.get('/vendor_ids_for_site_map', async (req, res) => {
 /*
 * Policy Pages - API
 */
-/*router.get('/getPolicy/:policyname', async (req, res) => {
-  try {
-    let { policyname } = req.params;
-    
-    const data = await query(
-      `SELECT terms_and_conditions 
-       FROM terms_conditions
-       WHERE condition_type_id IN
-        (SELECT id FROM terms_conditions_type WHERE slugify(name) LIKE '${policyname}')`
-    )
-
-    // let dbq = await query(`SELECT id FROM terms_conditions_type WHERE slugify(name) LIKE '${policyname}'`)
-    // res.send(dbq)
-    res.status(200).json([...data])
-  } catch (e) {
-    console.error(e)
-    res.status(500).send(e)
-  }
-});*/
-
-router.get('/getPolicy/:slug', async (req, res) => {
-  const {slug} = req.params
-  const id = getIdFromSlug(slug)
-
-  try {
-    const data = await query(
-      `SELECT
-          tc.terms_and_conditions 
-      FROM
-          terms_conditions_type tct 
-      JOIN
-          terms_conditions tc 
-              ON tct.id = tc.condition_type_id 
-      WHERE
-          tct.id = ${id}`
-    )
-
-    return res.status(200).json(data ? data[0] : []);
-  } catch (e) {
-    console.error(e)
-    res.status(500).send(e)
-  }
-})
-
-// It's for testing purpose
-router.get('/slugpolicy', async (req, res) => {
-  try {
-    const data = await query(
-          `SELECT
-          id,
-          name
-      FROM
-          terms_conditions_type
-      WHERE
-          softDel=0 AND status=1`
-    )
-
-    let slugified_data = []
-
-    for (const {id, name} of data) {
-      let slug_name = urlSlug(name)
-      slug_name = `${slug_name}-${id}`
-      slugified_data = [...slugified_data, {slug: slug_name}]
-    }
-
-    return res.status(200).json(slugified_data)
-  } catch (e) {
-    console.error(e)
-    return res.status(500).send(e)
-  }
-})
+router.use('/', require('./policy.api'))
 
 /*
 * E-COURIER API MODULE | request redirect : baseurl/api/ecourier/ 
