@@ -1,11 +1,13 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const slugify = require('slugify');
+const urlSlug = require('url-slug')
 const { sampleSize, size } = require('lodash');
 const auth = require('./authFunctionality');
 const temp_wish = require('./tempSellWishList');
 const featureProductHelper = require('./feature_product_list_helper');
 const vendor = require('./vendorHelper');
+const {getIdFromSlug} = require("./slug.helpers");
 
 // const upload_path = `${__dirname}/../../upload/customerPhoto/`;
 const upload_path = `${__dirname}/../../banijjoAdmin/public/upload/customerPhoto/`;
@@ -2502,17 +2504,9 @@ router.get('/vendor_ids_for_site_map', async (req, res) => {
 /*
 * Policy Pages - API
 */
-router.get('/getPolicy/:policyname', async (req, res) => {
+/*router.get('/getPolicy/:policyname', async (req, res) => {
   try {
     let { policyname } = req.params;
-  
-    policyname = slugify(policyname, {
-      replacement: '-',  // replace spaces with replacement character, defaults to `-`
-      remove: undefined, // remove characters that match regex, defaults to `undefined`
-      lower: true,      // convert to lower case, defaults to `false`
-      strict: false,     // strip special characters except replacement, defaults to `false`
-      locale: 'vi'       // language code of the locale to use
-    })
     
     const data = await query(
       `SELECT terms_and_conditions 
@@ -2528,7 +2522,58 @@ router.get('/getPolicy/:policyname', async (req, res) => {
     console.error(e)
     res.status(500).send(e)
   }
-});
+});*/
+
+router.get('/getPolicy/:slug', async (req, res) => {
+  const {slug} = req.params
+  const id = getIdFromSlug(slug)
+
+  try {
+    const data = await query(
+      `SELECT
+          tc.terms_and_conditions 
+      FROM
+          terms_conditions_type tct 
+      JOIN
+          terms_conditions tc 
+              ON tct.id = tc.condition_type_id 
+      WHERE
+          tct.id = ${id}`
+    )
+
+    return res.status(200).json(data ? data[0] : []);
+  } catch (e) {
+    console.error(e)
+    res.status(500).send(e)
+  }
+})
+
+router.get('/slugpolicy', async (req, res) => {
+  try {
+    const data = await query(
+          `SELECT
+          id,
+          name
+      FROM
+          terms_conditions_type
+      WHERE
+          softDel=0 AND status=1`
+    )
+
+    let slugified_data = []
+
+    for (const {id, name} of data) {
+      let slug_name = urlSlug(name)
+      slug_name = `${slug_name}-${id}`
+      slugified_data = [...slugified_data, {slug: slug_name}]
+    }
+
+    return res.status(200).json(slugified_data)
+  } catch (e) {
+    console.error(e)
+    return res.status(500).send(e)
+  }
+})
 
 /*
 * E-COURIER API MODULE | request redirect : baseurl/api/ecourier/ 
