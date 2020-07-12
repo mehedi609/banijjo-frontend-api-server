@@ -1,8 +1,6 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const scuid = require('scuid');
 const slugify = require('slugify');
-const urlSlug = require('url-slug');
 const { sampleSize, size } = require('lodash');
 const auth = require('./authFunctionality');
 const temp_wish = require('./tempSellWishList');

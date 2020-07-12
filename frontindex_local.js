@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 
 const app = express();
@@ -29,6 +30,8 @@ app.use(
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
+
+app.use(morgan("dev"));
 
 app.use("/api", require("./server/api"));
 app.use("/api/dynamic-routes", require('./server/dynamics-routes'));
