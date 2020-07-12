@@ -2548,6 +2548,7 @@ router.get('/getPolicy/:slug', async (req, res) => {
   }
 })
 
+// It's for testing purpose
 router.get('/slugpolicy', async (req, res) => {
   try {
     const data = await query(
