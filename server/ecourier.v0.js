@@ -56,31 +56,26 @@ router.post('/order-place', async (req, res) => {
             headers : { headers },
             body : JSON.stringify(body)
     })
-    .then(res => {
-        return res.json();
-    })
+    .then(res =>  res.json())
     .then(data => {
-        // return res.send(data);
-        saveOrderInfo(data);
+        const { message, ID } = data
+        saveOrderInfo(ID)
+        res.send(message)
     })
     .catch(err => {
-        res.send(err);
+        res.send(err)
     })
 });
 
 
-const saveOrderInfo = async (data) => {
-    try{
-        const { message, ID } = data;
-
+const saveOrderInfo = async (ID) => {
+    try{        
         return await query(
             `INSERT INTO order 
             (courier_service_id, courier_order_code) VALUES (1, ${ID})`
         );
-
-        res.send(message);
-    }catch(e){
-        res.send(e)
+    }catch(err){
+        res.send(err)
     }
 }
 

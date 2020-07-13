@@ -2558,6 +2558,27 @@ router.get('/getPolicy/:policyname', async (req, res) => {
   }
 });
 
+// 
+// Dynamic Logo, URL and Name fetch for Banijjo.com and Banijjo.com.bd
+// 
+router.get('/getCompanyInfo', async (req, res) => {
+  try {        
+    const data = await query(`
+      SELECT 
+        name, image, email, phone, website 
+      FROM 
+        gnr_company
+      WHERE 
+        status = 1
+      LIMIT 1
+    `)
+    res.status(200).json([...data])
+  } catch (e) {
+    console.error(e)
+    res.status(500).send(e)
+  }
+});
+
 /*
 * E-COURIER API MODULE | request redirect : baseurl/api/ecourier/ 
 */
