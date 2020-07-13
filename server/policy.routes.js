@@ -5,7 +5,7 @@ const { query } = require('../db_config');
 
 const router = express.Router();
 
-router.get('/policy/:slug', async (req, res) => {
+router.get('/:slug', async (req, res) => {
   const {slug} = req.params
   const id = getIdFromSlug(slug)
 
